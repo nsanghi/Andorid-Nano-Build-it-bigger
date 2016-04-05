@@ -1,5 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -56,6 +57,7 @@ class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
 
         Intent intent = new Intent(context, JokeDisplayActivity.class);
         intent.putExtra(JokeDisplayActivity.JOKE_KEY, result);
+
         context.startActivity(intent);
 
     }

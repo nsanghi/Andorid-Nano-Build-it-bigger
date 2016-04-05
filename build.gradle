@@ -12,6 +12,24 @@ buildscript {
     }
 }
 
+
+task runAppEngine (dependsOn: ":backend:appengineRun") {
+    project(":backend").afterEvaluate { backend ->
+        backend.extensions.appengine.daemon = true
+    }
+    doLast {
+        println "started the server!"
+    }
+}
+
+
+runAppEngine.finalizedBy ":backend:appengineStop"
+
+//,':app:connectedCheck', ':backend:appengineStop']
+task runUdacityTest (dependsOn: ['runAppEngine', ':app:connectedCheck']) {
+    println "I am here"
+}
+
 allprojects {
     repositories {
         jcenter()

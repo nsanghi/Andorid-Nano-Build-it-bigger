@@ -40,6 +40,11 @@ public class MyEndpoint {
         MyBean response = new MyBean();
         JokeGenerator jokeGenerator = new JokeGenerator();
         response.setData(jokeGenerator.getJoke());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            System.out.println("awakened early");
+        }
         return response;
 
     }

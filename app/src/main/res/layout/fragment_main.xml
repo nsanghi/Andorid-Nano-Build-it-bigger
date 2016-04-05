@@ -21,7 +21,15 @@
         android:text="@string/button_text"
         android:onClick="tellJoke"
 
-        />
+        android:id="@+id/button" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleLarge"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -32,5 +40,8 @@
         ads:adSize="BANNER"
         ads:adUnitId="@string/banner_ad_unit_id">
     </com.google.android.gms.ads.AdView>
+
+
+
 
 </RelativeLayout>

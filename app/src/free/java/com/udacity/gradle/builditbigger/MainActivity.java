@@ -5,15 +5,41 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+
+import java.lang.Override;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    InterstitialAd mInterstitialAd;
+    private ProgressBar mSpinner;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mSpinner = (ProgressBar)findViewById(R.id.progress_bar);
+        mSpinner.setVisibility(View.GONE);
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+                beginJokeFetching();
+            }
+        });
+
+        requestNewInterstitial();
     }
 
 
@@ -39,6 +65,12 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onPause() {
+        mSpinner.setVisibility(View.GONE);
+        super.onPause();
+    }
+
     public void tellJoke(View view){
 
         //JokeGenerator jokeGenerator = new JokeGenerator();
@@ -55,9 +87,27 @@ public class MainActivity extends ActionBarActivity {
         startActivity(intent);
         */
 
-        new EndpointsAsyncTask().execute(this);
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            beginJokeFetching();
+        }
+
 
     }
 
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                  .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                  .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
+
+    private void beginJokeFetching() {
+
+        mSpinner.setVisibility(View.VISIBLE);
+        new EndpointsAsyncTask().execute(this);
+    }
 
 }
